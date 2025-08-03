@@ -5,14 +5,16 @@ from threading import Thread
 from flask import Flask
 import json
 import time
+import os
 
-TOKEN = '8238629742:AAGUzCWKz4WpR4f08-XRaij6uMHCKl-kX20'  # Вставь сюда свой токен
+TOKEN = os.getenv("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
 user_habits = {}
 habit_log = {}
 reminders = {}
 user_timezones = {}
+
 
 DATA_FILE = "data.json"
 
