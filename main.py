@@ -340,7 +340,18 @@ def reminder_checker():
                 print(f"Ошибка напоминания для {user_id}: {e}")
         time.sleep(60)
 
-keep_alive()
-Thread(target=reminder_checker, daemon=True).start()
+from flask import request
 
-bot.infinity_polling()
+@app.route(f"/{TOKEN}", methods=["POST"])
+def webhook():
+    json_string = request.get_data().decode("utf-8")
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return "!", 200
+
+if __name__ == "__main__":
+    bot.remove_webhook()
+    bot.set_webhook(url=f"https://habit-tracker-bot-w3f8.onrender.com/{TOKEN}")
+    Thread(target=reminder_checker, daemon=True).start()
+    keep_alive()
+
